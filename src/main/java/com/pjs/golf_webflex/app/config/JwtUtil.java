@@ -1,19 +1,26 @@
 package com.pjs.golf_webflex.app.config;
 
+import com.pjs.golf_webflex.app.auth.adapter.AccountAdapter;
+import com.pjs.golf_webflex.app.auth.dto.Account;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
+import org.springframework.security.core.Authentication;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
 
     private final String SECRET_KEY;
     private final long VALID_TIME;
+
+    private static final String AUTHORITIES_KEY = "auth";
 
     private JwtUtil(
             @Value("${spring.jwt.secret}") String secret,
@@ -22,15 +29,34 @@ public class JwtUtil {
         this.SECRET_KEY = secret;
         this.VALID_TIME = oneDay;
     }
-    public String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
-    }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    public String createToken(UserDetails userDetails) {
+        Account account = ((AccountAdapter) userDetails).getAccount();
+
+        String authorities = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+        Long id = account.getId();
+        String userName = account.getUsername();
+        String name = account.getName();
+        String birth = account.getBirth().toString();
+        String gender = account.getGender();
+
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.VALID_TIME);
+
+
+        Map<String, Object> payloads = new HashMap<>();
+        payloads.put("id", id);
+        payloads.put("name", name);
+        payloads.put("username", userName);
+        payloads.put("birth", birth);
+        payloads.put("gender", gender);
+        payloads.put(AUTHORITIES_KEY, authorities);
+
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
+                .setClaims(payloads)
+                .setSubject(account.getName())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + VALID_TIME ))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
