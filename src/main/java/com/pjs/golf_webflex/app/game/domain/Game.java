@@ -1,4 +1,4 @@
-package com.pjs.golf_webflex.app.game.entity;
+package com.pjs.golf_webflex.app.game.domain;
 
 
 import lombok.*;

@@ -1,3 +1,17 @@
 spring:
   application.name: golf_webflex
+  jwt:
+    secret: akluiwdjlaiwdjlaiwdjaliwdhjaluifhkuyawGDJYDGalwdijawdliawdhjlakuwdgbhalowdaawdaqwdawdq11232wdiolj123123
+    minute: 60000
+    hour: 3600000
+    day: 86400000
 
+  profiles:
+    include: database
+
+
+logging:
+  level:
+    org:
+      springframework:
+        r2dbc: DEBUG
