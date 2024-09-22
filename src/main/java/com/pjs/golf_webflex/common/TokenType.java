@@ -1,5 +1,15 @@
 package com.pjs.golf_webflex.common;
 
 public enum TokenType {
-    ACCESS_TOKEN, REFRESH_TOKEN
+
+    ACCESS_TOKEN("accessToken"), REFRESH_TOKEN("refreshToken");
+    private final String value;
+
+    TokenType(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

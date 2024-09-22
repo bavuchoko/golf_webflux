@@ -133,7 +133,4 @@ public class JwtUtil implements InitializingBean {
                 });
     }
 
-    public String getRefreshToken(ServerHttpRequest request) {
-        return cookieUtil.getRefreshToken(request);
-    }
 }

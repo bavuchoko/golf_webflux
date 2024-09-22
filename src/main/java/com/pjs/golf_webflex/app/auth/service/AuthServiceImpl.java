@@ -4,10 +4,10 @@ import com.pjs.golf_webflex.app.auth.adapter.AccountAdapter;
 import com.pjs.golf_webflex.app.auth.dto.LoginRequestDto;
 import com.pjs.golf_webflex.common.TokenType;
 import com.pjs.golf_webflex.config.JwtUtil;
+import com.pjs.golf_webflex.config.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,6 +25,7 @@ public class AuthServiceImpl implements AuthService{
   // 변경된 부분
     private final CustomUserDetailsServiceImpl customUserDetailsService;
     private final JwtUtil jwtUtil;
+    private final CookieUtil cookieUtil;
     private final PasswordEncoder passwordEncoder;
 
     public Mono<String> authorize(LoginRequestDto loginRequestDto, ServerHttpResponse response) {
@@ -47,7 +48,7 @@ public class AuthServiceImpl implements AuthService{
 
     private void addRefreshTokenToResponse(ServerHttpResponse response, UserDetails userDetails) {
         String refreshToken = jwtUtil.createToken(TokenType.REFRESH_TOKEN, userDetails);
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+        ResponseCookie refreshTokenCookie = ResponseCookie.from(TokenType.REFRESH_TOKEN.getValue(), refreshToken)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -69,8 +70,7 @@ public class AuthServiceImpl implements AuthService{
      */
     @Override
     public Mono<String> reIssueToken(ServerHttpRequest request) {
-        String storedRefreshToken = jwtUtil.getRefreshToken(request);
-
+        String storedRefreshToken = cookieUtil.getToken(request, TokenType.REFRESH_TOKEN);
         if (StringUtils.hasText(storedRefreshToken)) {
             // 토큰이 유효한지 검증
             return jwtUtil.validateToken(storedRefreshToken)
