@@ -1,4 +1,4 @@
-package com.pjs.golf_webflex.app.config;
+package com.pjs.golf_webflex.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

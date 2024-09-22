@@ -15,3 +15,6 @@ logging:
     org:
       springframework:
         r2dbc: DEBUG
+
+server:
+  port: 8443
