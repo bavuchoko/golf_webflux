@@ -33,17 +33,22 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
             String token = authHeader.substring(7);
 
             // 비동기로 사용자 정보 가져오기
-            return jwtUtil.validateToken(token) ?
-                    jwtUtil.getAuthentication(token)
-                            .flatMap(authentication -> {
-
-                                // SecurityContext에 인증 객체 저장
-                                SecurityContext context = new SecurityContextImpl(authentication);
-                                return chain.filter(exchange)
-                                        .contextWrite(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(context)));
-                            })
-                            .onErrorResume(e -> Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing JWT token"))) :
-                    Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing JWT token"));
+            return jwtUtil.validateToken(token)
+                    .flatMap(isValid -> {
+                        if (isValid) {
+                            // 비동기로 사용자 정보 가져오기
+                            return jwtUtil.getAuthentication(token)
+                                    .flatMap(authentication -> {
+                                        // SecurityContext에 인증 객체 저장
+                                        SecurityContext context = new SecurityContextImpl(authentication);
+                                        return chain.filter(exchange)
+                                                .contextWrite(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(context)));
+                                    });
+                        } else {
+                            return Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing JWT token"));
+                        }
+                    })
+                    .onErrorResume(e -> Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing JWT token")));
         }
 
         // 토큰이 없으면 null

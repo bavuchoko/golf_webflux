@@ -2,19 +2,20 @@ package com.pjs.golf_webflex.config;
 
 import com.pjs.golf_webflex.app.auth.adapter.AccountAdapter;
 import com.pjs.golf_webflex.app.auth.dto.Account;
+import com.pjs.golf_webflex.common.TokenType;
+import com.pjs.golf_webflex.config.util.CookieUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -31,18 +32,22 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil implements InitializingBean {
 
+    @Autowired
+    CookieUtil cookieUtil;
+
     private final String SECRET_KEY;
-    private final long VALID_TIME;
+    private final long ONE_DAY;
     private final ReactiveUserDetailsService reactiveUserDetailsService;
     private static final String AUTHORITIES_KEY = "auth";
     private Key key;
 
     private JwtUtil(
-            @Value("${spring.jwt.secret}") String secret,
+            CookieUtil cookieUtil, @Value("${spring.jwt.secret}") String secret,
             @Value("${spring.jwt.day}") long oneDay, ReactiveUserDetailsService reactiveUserDetailsService){
+        this.cookieUtil = cookieUtil;
 
         this.SECRET_KEY = secret;
-        this.VALID_TIME = oneDay;
+        this.ONE_DAY = oneDay;
         this.reactiveUserDetailsService = reactiveUserDetailsService;
     }
 
@@ -52,7 +57,7 @@ public class JwtUtil implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(UserDetails userDetails) {
+    public String createToken(TokenType tokenType, UserDetails userDetails) {
         Account account = ((AccountAdapter) userDetails).getAccount();
 
         String authorities = userDetails.getAuthorities().stream()
@@ -65,7 +70,7 @@ public class JwtUtil implements InitializingBean {
         String gender = account.getGender();
 
         long now = (new Date()).getTime();
-        Date validity = new Date(now + this.VALID_TIME);
+        Date validity = tokenType == TokenType.ACCESS_TOKEN?  new Date(now + this.ONE_DAY) : new Date(now + ( this.ONE_DAY * 15) );
 
 
         Map<String, Object> payloads = new HashMap<>();
@@ -80,27 +85,27 @@ public class JwtUtil implements InitializingBean {
                 .setClaims(payloads)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + VALID_TIME ))
+                .setExpiration(validity)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public Boolean validateToken(String token) {
+    public Mono<Boolean> validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
+            return Mono.just(true);
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
-            throw e;
+            log.error("잘못된 JWT 서명입니다.");
+            return Mono.error(e);
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
-            throw e;
+            log.error("만료된 JWT 토큰입니다.");
+            return Mono.error(e);
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
-            throw e;
+            log.error("지원되지 않는 JWT 토큰입니다.");
+            return Mono.error(e);
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
-            throw e;
+            log.error("JWT 토큰이 잘못되었습니다.");
+            return Mono.error(e);
         }
     }
 
@@ -126,5 +131,9 @@ public class JwtUtil implements InitializingBean {
                     // 사용자 정보를 바탕으로 인증 객체 생성
                     return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 });
+    }
+
+    public String getRefreshToken(ServerHttpRequest request) {
+        return cookieUtil.getRefreshToken(request);
     }
 }
