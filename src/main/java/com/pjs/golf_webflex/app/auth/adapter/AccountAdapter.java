@@ -28,6 +28,7 @@ public class AccountAdapter extends User{
     }
 
     public Account getAccount() {
+        account.setPassword(null);
         return account;
     }
 }

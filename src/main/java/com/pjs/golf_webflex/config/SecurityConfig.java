@@ -1,15 +1,14 @@
-package com.pjs.golf_webflex.app.config;
+package com.pjs.golf_webflex.config;
 
+import com.pjs.golf_webflex.config.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
@@ -24,15 +23,20 @@ public class SecurityConfig {
 
     private final ReactiveUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+        ReactiveAuthenticationManager authenticationManager = Mono::just;
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtUtil);
+
         http.csrf(csrf -> csrf.disable())
                 .authorizeExchange(authorize -> authorize
-                        .pathMatchers("/api/auth/login").permitAll()
+                        .pathMatchers("/api/auth/**").permitAll()
                         .anyExchange().authenticated()
-                );
+                )
+                .addFilterBefore(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION);
         return http.build();
     }
 
