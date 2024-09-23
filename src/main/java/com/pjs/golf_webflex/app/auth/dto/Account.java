@@ -1,6 +1,8 @@
 package com.pjs.golf_webflex.app.auth.dto;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +12,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table
 public class Account {
+    @Id
     private Long id;
     private String username;
     private String name;
