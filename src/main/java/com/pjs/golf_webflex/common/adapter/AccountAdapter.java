@@ -1,4 +1,4 @@
-package com.pjs.golf_webflex.app.auth.adapter;
+package com.pjs.golf_webflex.common.adapter;
 
 import com.pjs.golf_webflex.app.auth.dto.Account;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,7 +1,6 @@
 package com.pjs.golf_webflex.config.resolver;
 
-import com.pjs.golf_webflex.app.auth.adapter.AccountAdapter;
-import com.pjs.golf_webflex.app.auth.dto.Account;
+import com.pjs.golf_webflex.common.adapter.AccountAdapter;
 import com.pjs.golf_webflex.config.JwtUtil;
 import com.pjs.golf_webflex.config.annotation.CurrentUser;
 import lombok.extern.slf4j.Slf4j;

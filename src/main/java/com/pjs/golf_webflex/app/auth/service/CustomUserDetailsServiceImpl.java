@@ -1,6 +1,6 @@
 package com.pjs.golf_webflex.app.auth.service;
 
-import com.pjs.golf_webflex.app.auth.adapter.AccountAdapter;
+import com.pjs.golf_webflex.common.adapter.AccountAdapter;
 import com.pjs.golf_webflex.app.auth.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
