@@ -15,38 +15,15 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of="id", callSuper = false)
+@EqualsAndHashCode(of="id")
 public class Game {
 
     @Id
     private Long id;
-
-    private int round;
-
-    @Column("host")
+    private Long competitionId;
     private Long hostId;
-
-    private int course;
-
-    private int hole;
-
-    @Column("play_date")
+    private Long fieldsId;
     private LocalDateTime playDate;
-
-    @Column("field")
-    private Long fieldId;
-
-    private List<Long> playerIds;
-
-    private List<Long> sheetIds;
-
-    private String status;
-
-    public void enrollGame(Long accountId) {
-        List<Long> updatedPlayerIds = new ArrayList<>(this.playerIds);
-        updatedPlayerIds.add(accountId);
-        this.playerIds = updatedPlayerIds;
-    }
-
+    private LocalDateTime finishDate;
 
 }
