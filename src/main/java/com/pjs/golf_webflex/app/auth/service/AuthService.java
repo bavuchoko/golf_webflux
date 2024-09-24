@@ -1,8 +1,6 @@
 package com.pjs.golf_webflex.app.auth.service;
 
 import com.pjs.golf_webflex.app.auth.dto.LoginRequestDto;
-import com.pjs.golf_webflex.common.TokenType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import reactor.core.publisher.Mono;

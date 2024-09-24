@@ -3,7 +3,6 @@ package com.pjs.golf_webflex.app.auth;
 
 import com.pjs.golf_webflex.app.auth.dto.LoginRequestDto;
 import com.pjs.golf_webflex.app.auth.service.AuthService;
-import com.pjs.golf_webflex.common.TokenType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

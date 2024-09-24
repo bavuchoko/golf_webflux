@@ -1,6 +1,6 @@
 package com.pjs.golf_webflex.app.auth.repository.impl;
 
-import com.pjs.golf_webflex.app.auth.dto.Account;
+import com.pjs.golf_webflex.app.auth.domain.Account;
 import com.pjs.golf_webflex.app.auth.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

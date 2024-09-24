@@ -1,4 +1,4 @@
-package com.pjs.golf_webflex.app.auth.dto;
+package com.pjs.golf_webflex.app.auth.domain;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
