@@ -1,5 +1,6 @@
 package com.pjs.golf_webflex.app.auth.service;
 
+import com.pjs.golf_webflex.app.auth.dto.AccountRequestDto;
 import com.pjs.golf_webflex.common.adapter.AccountAdapter;
 import com.pjs.golf_webflex.app.auth.dto.LoginRequestDto;
 import com.pjs.golf_webflex.common.TokenType;
@@ -92,5 +93,15 @@ public class AuthServiceImpl implements AuthService{
         }
         // 리프레시 토큰이 없을 경우
         return Mono.error(new IllegalArgumentException("Refresh token is missing"));
+    }
+
+    @Override
+    public Mono join(AccountRequestDto accountRequestDto) {
+        return null;
+    }
+
+    @Override
+    public Mono update(AccountRequestDto accountRequestDto) {
+        return null;
     }
 }

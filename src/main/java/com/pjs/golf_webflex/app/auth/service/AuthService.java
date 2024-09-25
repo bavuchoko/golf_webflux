@@ -1,5 +1,6 @@
 package com.pjs.golf_webflex.app.auth.service;
 
+import com.pjs.golf_webflex.app.auth.dto.AccountRequestDto;
 import com.pjs.golf_webflex.app.auth.dto.LoginRequestDto;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -12,4 +13,8 @@ public interface AuthService {
 
     Mono<String> reIssueToken(ServerHttpRequest request);
 
+
+    Mono join(AccountRequestDto accountRequestDto);
+
+    Mono update(AccountRequestDto accountRequestDto);
 }
