@@ -1,29 +1,27 @@
-package com.pjs.golf_webflex.app.game.domain;
+package com.pjs.golf_webflex.app.game.dto;
 
-
+import com.pjs.golf_webflex.app.auth.dto.AccountResponseDto;
+import com.pjs.golf_webflex.app.game.domain.GameProgress;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Table("game")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of="id")
-public class Game {
+public class GameResponseDto {
 
-    @Id
     private Long id;
     private Long competitionId;
-    private Long hostId;
-    private Long fieldsId;
+    private String hostName;
+    private String fieldsName;
     private LocalDateTime playDate;
     private LocalDateTime finishDate;
     private GameProgress progress;
-    private List<Long> players;
 
+    private List<AccountResponseDto> players;
 }
