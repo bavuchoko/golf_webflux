@@ -1,7 +1,9 @@
 package com.pjs.golf_webflex.app.game.domain;
 
-import lombok.*;
-import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -21,6 +23,15 @@ public class GameProgress {
     private String status;
 
     public void progress(){
+        int base = 9;
+        int remain = this.hole % base;
 
+        if( remain != 0){
+            ++hole;
+        }else{
+            hole =1;
+        }
+        ++turn;
+        this.half = ((this.turn - 1)/9) + 1;
     }
 }
