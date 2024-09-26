@@ -22,6 +22,5 @@ public class GameResponseDto {
     private LocalDateTime playDate;
     private LocalDateTime finishDate;
     private GameProgress progress;
-
     private List<AccountResponseDto> players;
 }

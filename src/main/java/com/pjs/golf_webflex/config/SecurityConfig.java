@@ -33,7 +33,7 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeExchange(authorize -> authorize
-                        .pathMatchers("/api/auth/**").permitAll()
+                        .pathMatchers("/api/vi/auth/**").permitAll()
                         .anyExchange().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION);

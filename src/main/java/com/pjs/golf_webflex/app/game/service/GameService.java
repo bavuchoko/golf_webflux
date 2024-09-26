@@ -12,7 +12,7 @@ public interface GameService {
     Flux getGames(SearchDto searchDto, Long userId);
 
     //경기생성
-    Mono createGame(Game game, Long userId);
+    Mono createGame(Game game);
 
     //상세보기
     Mono getGame(Long gameId, Long userId);

@@ -136,6 +136,13 @@ create table game_progress(
     PRIMARY KEY (game_id,turns)
 )comment '매치 진행 정보';
 
+CREATE TABLE game_player (
+    game_id BIGINT NOT NULL ,
+    account_d BIGINT NOT NULL ,
+    FOREIGN KEY (game_id) REFERENCES club (id),
+    FOREIGN KEY (account_id) REFERENCES account (id)
+) comment  '경기 참가자';
+
 CREATE TABLE score (
     game_id BIGINT,
     player_id BIGINT comment '선수',
