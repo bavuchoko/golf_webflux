@@ -1,7 +1,7 @@
 package com.pjs.golf_webflex.config;
 
 import com.pjs.golf_webflex.common.adapter.AccountAdapter;
-import com.pjs.golf_webflex.app.auth.domain.Account;
+import com.pjs.golf_webflex.domain.Account;
 import com.pjs.golf_webflex.common.TokenType;
 import com.pjs.golf_webflex.config.util.CookieUtil;
 import io.jsonwebtoken.*;

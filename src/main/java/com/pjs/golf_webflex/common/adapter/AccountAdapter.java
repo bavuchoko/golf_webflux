@@ -1,6 +1,6 @@
 package com.pjs.golf_webflex.common.adapter;
 
-import com.pjs.golf_webflex.app.auth.domain.Account;
+import com.pjs.golf_webflex.domain.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
