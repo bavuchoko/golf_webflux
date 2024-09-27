@@ -1,8 +1,8 @@
 package com.pjs.golf_webflex.service;
 
-import com.pjs.golf_webflex.dto.AccountRequestDto;
+import com.pjs.golf_webflex.dto.AccountDto;
 import com.pjs.golf_webflex.common.adapter.AccountAdapter;
-import com.pjs.golf_webflex.dto.LoginRequestDto;
+import com.pjs.golf_webflex.dto.LoginDto;
 import com.pjs.golf_webflex.common.TokenType;
 import com.pjs.golf_webflex.config.JwtUtil;
 import com.pjs.golf_webflex.config.util.CookieUtil;
@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthService{
     private final CookieUtil cookieUtil;
     private final PasswordEncoder passwordEncoder;
 
-    public Mono<String> authorize(LoginRequestDto loginRequestDto, ServerHttpResponse response) {
+    public Mono<String> authorize(LoginDto loginRequestDto, ServerHttpResponse response) {
         return customUserDetailsService.findByUsername(loginRequestDto.getUsername())
                 .flatMap(userDetails -> {
                     if (passwordEncoder.matches(loginRequestDto.getPassword(), userDetails.getPassword())) {
@@ -96,12 +96,12 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public Mono join(AccountRequestDto accountRequestDto) {
+    public Mono join(AccountDto accountRequestDto) {
         return null;
     }
 
     @Override
-    public Mono update(AccountRequestDto accountRequestDto) {
+    public Mono update(AccountDto accountRequestDto) {
         return null;
     }
 }

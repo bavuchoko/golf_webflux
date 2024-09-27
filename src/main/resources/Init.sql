@@ -138,7 +138,7 @@ create table game_progress(
 
 CREATE TABLE game_player (
     game_id BIGINT NOT NULL ,
-    account_d BIGINT NOT NULL ,
+    account_id BIGINT NOT NULL ,
     FOREIGN KEY (game_id) REFERENCES club (id),
     FOREIGN KEY (account_id) REFERENCES account (id)
 ) comment  '경기 참가자';

@@ -5,16 +5,23 @@ spring:
     minute: 60000
     hour: 3600000
     day: 86400000
-
+  r2dbc:
+    logging:
+      enabled: true
   profiles:
     include: database
 
 
 logging:
   level:
+    io:
+#      r2dbc: DEBUG
     org:
       springframework:
+#        security: DEBUG
         r2dbc: DEBUG
+#        web.reactive: DEBUG
+#    reactor: DEBUG
 
 server:
   port: 8443

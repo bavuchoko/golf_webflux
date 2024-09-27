@@ -1,6 +1,7 @@
 package com.pjs.golf_webflex.repository.impl;
 
 import com.pjs.golf_webflex.domain.Account;
+import com.pjs.golf_webflex.dto.info.AccountInfo;
 import com.pjs.golf_webflex.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,7 @@ import org.springframework.r2dbc.core.DatabaseClient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
@@ -50,5 +52,23 @@ public class AccountRepositoryImpl implements AccountRepository{
                             .collect(Collectors.toList()));
                     return result;
                 }).single();
+    }
+
+    @Override
+    public Mono<Map<Long, AccountInfo>> findUsers(List<Long> userIds) {
+
+        if (userIds == null || userIds.isEmpty()) {
+            return Mono.just(Map.of());
+        }
+
+        return databaseClient.sql("SELECT id, name, birth, gender FROM account WHERE id IN (:userIds)")
+                .bind("userIds", userIds)
+                .map(row -> new AccountInfo(
+                        row.get("id", Long.class),
+                        row.get("name", String.class),
+                        row.get("birth", String.class),
+                        row.get("gender", String.class)))
+                .all()
+                .collectMap(AccountInfo::id);
     }
 }

@@ -1,4 +1,4 @@
-package com.pjs.golf_webflex.dto;
+package com.pjs.golf_webflex.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

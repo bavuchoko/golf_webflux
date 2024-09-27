@@ -1,15 +1,15 @@
 package com.pjs.golf_webflex.service;
 
 import com.pjs.golf_webflex.domain.Game;
-import com.pjs.golf_webflex.common.SearchDto;
-import reactor.core.publisher.Flux;
+import com.pjs.golf_webflex.dto.GameDto;
+import org.springframework.data.domain.Slice;
 import reactor.core.publisher.Mono;
 
 //내가 참가하거나 호스트인 경기만
 public interface GameService {
 
     //목록조회
-    Flux getGames(SearchDto searchDto, Long userId);
+    Mono<Slice<GameDto>> getGames(Long userId, int lastId, int size);
 
     //경기생성
     Mono createGame(Game game);

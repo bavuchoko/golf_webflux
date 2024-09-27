@@ -1,7 +1,7 @@
 package com.pjs.golf_webflex.controller;
 
 
-import com.pjs.golf_webflex.dto.LoginRequestDto;
+import com.pjs.golf_webflex.dto.LoginDto;
 import com.pjs.golf_webflex.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> login(
-            @RequestBody LoginRequestDto loginRequestDto,
+            @RequestBody LoginDto loginRequestDto,
             ServerHttpResponse response
             ) {
         return authService.authorize(loginRequestDto, response)

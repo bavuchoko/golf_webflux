@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountRequestDto {
+public class AccountDto {
 
     private Long id;
     private String username;
@@ -20,5 +20,6 @@ public class AccountRequestDto {
     private LocalDateTime joinDate;
     private String gender;
     private List<String> roles;
+
 
 }
